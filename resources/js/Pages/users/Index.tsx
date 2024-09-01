@@ -11,11 +11,23 @@ import {
     DropdownMenuTrigger,
 } from '@/Components/ui/dropdown-menu';
 
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from '@/Components/ui/pagination';
+
 import { Head, Link, useForm } from '@inertiajs/react';
 import DeleteUser from './Delete';
 import { IconDotsVertical, IconHighlight, IconTrash } from '@irsyadadl/paranoid';
 
-export default function Index({ users }: { users: any }) {
+export default function Index(props: any) {
+    const { data: users, meta, links } = props.users;
+    console.log(users, meta, links);
     return (
         <>
             <Head title="Users" />
@@ -79,6 +91,35 @@ export default function Index({ users }: { users: any }) {
                         )}
                     </TableBody>
                 </Table>
+                {/* {meta.links.map((link: any, index: number) => (
+                    <Link href={link.url} key={index}>
+                        {link.label}
+                    </Link>
+                ))} */}
+
+                <Pagination className="py-8">
+                    <PaginationContent>
+                        {meta.links.map((link: any, index: number) => (
+                            <PaginationItem key={index}>
+                                {link.url == null ? (
+                                    <Button variant={'ghost'} disabled>
+                                        {link.label}
+                                    </Button>
+                                ) : (
+                                    <PaginationLink
+                                        as="button"
+                                        disabled={link.active}
+                                        isActive={link.active}
+                                        size={link.label === 'Previous' || link.label === 'Next' ? 'default' : 'icon'}
+                                        href={link.url}
+                                    >
+                                        {link.label}
+                                    </PaginationLink>
+                                )}
+                            </PaginationItem>
+                        ))}
+                    </PaginationContent>
+                </Pagination>
             </Container>
         </>
     );
