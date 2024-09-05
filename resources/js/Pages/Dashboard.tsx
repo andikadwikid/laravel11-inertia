@@ -1,9 +1,9 @@
 import { Head, usePage } from '@inertiajs/react';
-import { PageProps } from '@/types';
+import { PageData } from '@/types';
 import { AppLayout } from '@/Layouts/app-layout';
 import Header from '@/Components/header';
 
-export default function Dashboard({ auth }: PageProps) {
+export default function Dashboard({ auth }: PageData) {
     return (
         <>
             <Head title="Home" />

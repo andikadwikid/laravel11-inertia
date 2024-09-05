@@ -26,13 +26,13 @@ createServer((page) =>
             return page;
         },
         setup: ({ App, props }) => {
-            global.route<RouteName> = (name, params, absolute) =>
-                route(name, params as any, absolute, {
-                    // @ts-expect-error
-                    ...page.props.ziggy,
-                    // @ts-expect-error
-                    location: new URL(page.props.ziggy.location),
-                });
+            // global.route<RouteName> = (name, params, absolute) =>
+            //     route(name, params as any, absolute, {
+            //         // @ts-expect-error
+            //         ...page.props.ziggy,
+            //         // @ts-expect-error
+            //         location: new URL(page.props.ziggy.location),
+            //     });
 
             return <App {...props} />;
         },

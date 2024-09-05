@@ -10,15 +10,30 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/Components/ui/dropdown-menu';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from '@/Components/ui/pagination';
 
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import DeleteUser from './Delete';
 import { IconDotsVertical, IconHighlight, IconOpenLink, IconTrash } from '@irsyadadl/paranoid';
 import ResourcePagination from '@/Components/resource-pagination';
 import { UserData } from '@/types';
+import { usePaginator } from 'momentum-paginator';
 
-export default function Index(props: any) {
-    const { data: users, meta, links } = props.users;
+interface Props {
+    users: Paginator<UserData>;
+}
+
+export default function Index({ users }: Props) {
+    // const { data: users, meta, users } = props.users;
+    const { from, to, total, previous, next, pages } = usePaginator(users);
     return (
         <>
             <Head title="Users" />
@@ -41,8 +56,8 @@ export default function Index(props: any) {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {users.length > 0 ? (
-                            users.map((user: UserData, index: number) => (
+                        {users.data.length > 0 ? (
+                            users.data.map((user, index) => (
                                 <TableRow key={user.id}>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>
@@ -97,8 +112,49 @@ export default function Index(props: any) {
                         )}
                     </TableBody>
                 </Table>
+                <div className="mt-8 flex items-center justify-between">
+                    <div>
+                        Showing users {from} to {to} of {total}
+                    </div>
+                    <div>
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious
+                                        only={['users']}
+                                        as={previous.isActive ? 'a' : 'button'}
+                                        disabled={!previous.isActive}
+                                        href={previous.url ?? ''}
+                                    />
+                                </PaginationItem>
+                                {pages.map((page) => (
+                                    <PaginationItem key={page.label}>
+                                        {page.isPage ? (
+                                            <PaginationLink
+                                                only={['users']}
+                                                isActive={page.isCurrent}
+                                                href={page.url ?? ''}
+                                            >
+                                                {page.label}
+                                            </PaginationLink>
+                                        ) : (
+                                            <PaginationEllipsis />
+                                        )}
+                                    </PaginationItem>
+                                ))}
 
-                <ResourcePagination meta={meta} />
+                                <PaginationItem>
+                                    <PaginationNext
+                                        only={['users']}
+                                        as={next.isActive ? 'a' : 'button'}
+                                        disabled={!next.isActive}
+                                        href={next.url ?? ''}
+                                    />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
+                    </div>
+                </div>
             </Container>
         </>
     );

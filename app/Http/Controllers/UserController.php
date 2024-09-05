@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\UserData;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class UserController extends Controller
     public function index()
     {
         // $users = User::paginate();
-        $users = UserResource::collection(User::latest()->paginate(10));
+        $users = UserData::collect(User::latest()->paginate(5));
         return inertia('users/Index', [
             'users' => fn() => $users,
         ]);
