@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Com
 import Form from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { toast } from 'sonner';
 
 interface PageSettingsProps {

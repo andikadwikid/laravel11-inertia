@@ -3,7 +3,6 @@ import { InertiaLinkProps, Link, usePage } from '@inertiajs/react';
 import Logo from './logo';
 import NavLink from './NavLink';
 import { Container } from './container';
-import { PageProps } from '@/types';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -18,9 +17,10 @@ import {
 } from './ui/dropdown-menu';
 import { ChevronDown } from 'lucide-react';
 import { useTheme } from './theme-provider';
+import { PageData } from '@/types';
 
 export function Navbar() {
-    const { auth } = usePage<PageProps>().props;
+    const { auth } = usePage<PageData>().props;
 
     const { setTheme } = useTheme();
 
@@ -38,7 +38,11 @@ export function Navbar() {
                             Home
                         </NavbarLink>
 
-                        <NavbarLink current={route().current('users.index')} href={route('users.index')}>
+                        <NavbarLink
+                            only={['users']}
+                            current={route().current('users.index')}
+                            href={route('users.index')}
+                        >
                             Users
                         </NavbarLink>
 

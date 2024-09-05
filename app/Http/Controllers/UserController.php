@@ -15,9 +15,9 @@ class UserController extends Controller
     public function index()
     {
         // $users = User::paginate();
-        $users = UserResource::collection(User::paginate(10));
+        $users = UserResource::collection(User::latest()->paginate(10));
         return inertia('users/Index', [
-            'users' => $users,
+            'users' => fn() => $users,
         ]);
     }
 
@@ -59,7 +59,10 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return inertia('users/show', [
+            'user' => fn() => $user,
+            'articles' => inertia()->lazy(fn() => $user->articles),
+        ]);
     }
 
     /**

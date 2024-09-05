@@ -4,23 +4,29 @@ import { Toaster } from '@/Components/ui/sonner';
 import { usePage } from '@inertiajs/react';
 import { icons } from 'lucide-react';
 import { toast } from 'sonner';
+import axios from 'axios';
+import { FlashMessageData } from '@/types';
 
-interface FlashMessageProps {
-    title: string;
-    message: string;
-    icon?: string;
-}
 export function AppLayout({ children }: { children: React.ReactNode }) {
-    const { flash_message } = usePage<{ flash_message: FlashMessageProps }>().props;
+    const { flashMessage } = usePage<{ flashMessage: FlashMessageData }>().props;
+
+    // Menentukan tipe meta tag untuk mendapatkan CSRF token
+    const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
+
+    if (csrfToken) {
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+    } else {
+        console.error('CSRF token not found');
+    }
 
     useEffect(() => {
-        if (flash_message && flash_message.title && flash_message.message) {
-            toast(flash_message.title, {
-                description: flash_message.message,
-                icon: flash_message.icon,
+        if (flashMessage && flashMessage.title && flashMessage.message) {
+            toast(flashMessage.title, {
+                description: flashMessage.message,
+                icon: flashMessage.icon,
             });
         }
-    }, [flash_message]);
+    }, [flashMessage]);
 
     return (
         <div className="min-h-svh bg-muted/40">
